@@ -1,0 +1,38 @@
+LOAN RISK PREDICTION - ANALYTICAL INSIGHTS
+============================================================
+
+INSIGHT 1: Feature Importance
+  loan_amnt: 0.4808
+  installment: 0.2449
+  is_high_loan: 0.1899
+  is_high_installment: 0.0482
+  risk_flag: 0.0126
+  dti: 0.0113
+  loan_burden: 0.0080
+  grade_encoded: 0.0031
+  is_high_dti: 0.0014
+
+  Top predictor: loan_amnt
+
+INSIGHT 2: Risk Distribution
+  Low: 0.3%
+  Medium: 54.1%
+  High: 45.5%
+
+INSIGHT 3: DTI Impact
+  High DTI avg risk: 56.62
+  Low  DTI avg risk: 56.58
+
+INSIGHT 4: Grade vs Risk
+  Grade A: 62.05
+  Grade B: 56.64
+  Grade D: 56.31
+  Grade F: 55.48
+  Grade C: 55.37
+  Grade G: 53.36
+  Grade E: 51.80
+
+INSIGHT 5: Cluster Profiles
+  Low Risk Group: 13863 borrowers | Avg DTI=17.56 | Avg Risk=37.56
+  Medium Risk Group: 9114 borrowers | Avg DTI=18.96 | Avg Risk=71.75
+  High Risk Group: 7023 borrowers | Avg DTI=16.18 | Avg Risk=74.51
