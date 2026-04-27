@@ -59,13 +59,14 @@ def build_feature_vector(data: dict) -> np.ndarray:
     loan_amnt   = float(data["loan_amnt"])
     installment = float(data["installment"])
     dti         = float(data["dti"])
-    grade_str   = str(data["grade"]).upper()
-
-    # Grade encoding (LabelEncoder from training)
-    if grade_str not in le_grade.classes_:
-        raise ValueError(f"Unknown grade '{grade_str}'. "
-                         f"Valid grades: {list(le_grade.classes_)}")
-    grade_encoded = int(le_grade.transform([grade_str])[0])
+    
+    if "grade_encoded" in data:
+        grade_encoded = int(data["grade_encoded"])
+    else:
+        grade_str   = str(data["grade"]).upper()
+        if grade_str not in le_grade.classes_:
+            raise ValueError(f"Unknown grade '{grade_str}'. Valid grades: {list(le_grade.classes_)}")
+        grade_encoded = int(le_grade.transform([grade_str])[0])
 
     # Feature engineering (same logic as training)
     is_high_loan        = 1 if loan_amnt   > LOAN_AMNT_MEAN     else 0
@@ -86,6 +87,14 @@ def build_feature_vector(data: dict) -> np.ndarray:
 # ─────────────────────────────────────────────
 # ROUTES
 # ─────────────────────────────────────────────
+
+@app.after_request
+def after_request(response):
+    response.headers.add('Access-Control-Allow-Origin', '*')
+    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+    return response
+
 
 @app.route("/", methods=["GET"])
 def home():
@@ -133,10 +142,12 @@ def predict():
     if not data:
         return jsonify({"error": "Request body must be JSON"}), 400
 
-    required = ["loan_amnt", "installment", "dti", "grade"]
+    required = ["loan_amnt", "installment", "dti"]
     missing  = [k for k in required if k not in data]
     if missing:
         return jsonify({"error": f"Missing fields: {missing}"}), 400
+    if "grade" not in data and "grade_encoded" not in data:
+        return jsonify({"error": "Missing field: grade or grade_encoded"}), 400
 
     try:
         X_scaled = build_feature_vector(data)
@@ -161,6 +172,7 @@ def predict():
     return jsonify({
         "input":                data,
         "risk_score":           round(reg_score, 2),
+        "risk_category":        clf_category,
         "risk_category_reg":    reg_category,
         "risk_category_clf":    clf_category,
         "class_probabilities":  prob_dict
