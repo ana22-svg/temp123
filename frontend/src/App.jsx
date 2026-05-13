@@ -16,7 +16,7 @@ const PLOTS = [
   "13_f1_score_comparison.png", "14_grade_vs_risk.png"
 ];
 
-const API_URL = 'http://localhost:5000';
+const API_URL = 'http://13.236.4.148:5000';
 
 function App() {
   const [activeTab, setActiveTab] = useState('predictor');
