@@ -98,11 +98,7 @@ function PredictorTab() {
         grade_encoded: GRADE_MAPPING[currentData.grade]
       };
 
-<<<<<<< HEAD
-      const response = await fetch('https://temp123-1jgs.onrender.com/predict', {
-=======
       const response = await fetch(`${API_URL}/predict`, {
->>>>>>> cf38c2afaa7e6e71c2b14677b5feafea36383941
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
