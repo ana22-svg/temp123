@@ -11,7 +11,7 @@ Test:  POST http://127.0.0.1:5000/predict
 import json
 import joblib
 import numpy as np
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -35,7 +35,7 @@ LOAN_AMNT_MEAN     = training_stats["loan_amnt_mean"]
 INSTALLMENT_MEDIAN = training_stats["installment_median"]
 DTI_THRESHOLD      = training_stats["dti_high_threshold"]
 
-print("[app] ✓ All models loaded. Server ready.\n")
+print("[app] [OK] All models loaded. Server ready.\n")
 
 
 # ─────────────────────────────────────────────
@@ -113,6 +113,12 @@ def home():
 @app.route("/health", methods=["GET"])
 def health():
     return jsonify({"status": "ok", "models_loaded": True})
+
+
+@app.route("/plots/<path:filename>")
+def serve_plots(filename):
+    return send_from_directory("plots", filename)
+
 
 
 # ── Single Prediction ──────────────────────────────────────────
