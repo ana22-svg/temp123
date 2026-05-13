@@ -62,7 +62,7 @@ function App() {
         grade_encoded: GRADE_MAPPING[formData.grade]
       };
 
-      const response = await fetch('http://localhost:5000/predict', {
+      const response = await fetch('https://temp123-1jgs.onrender.com/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
